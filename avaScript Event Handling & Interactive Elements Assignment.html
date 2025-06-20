@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JavaScript Event Handling Playground</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      line-height: 1.5;
+      background: #fafafa;
+      color: #333;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    #hoverBox {
+      width: 200px;
+      height: 100px;
+      background-color: lightblue;
+      margin: 10px 0;
+      line-height: 100px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    #hoverBox.hovered {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+      color: crimson;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .gallery img {
+      max-width: 100%;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .accordion-btn {
+      background: #eee;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      text-align: left;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .accordion-btn.active {
+      background: #ccc;
+    }
+
+    .panel {
+      padding: 0 10px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: #f9f9f9;
+      border-left: 3px solid #4caf50;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    .error {
+      color: crimson;
+      font-size: 0.9em;
+      display: block;
+      height: 1.2em;
+    }
+
+    #formMessage {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>JS Event Handling & Interactive Elements</h1>
+  </header>
+
+  <section id="events">
+    <h2>1. Event Handling</h2>
+    <button id="colorBtn">Click Me to Change Color</button>
+    <div id="hoverBox">Hover over me!</div>
+    <input type="text" id="keyInput" placeholder="Type something..." />
+    <p id="keypressResult"></p>
+    <button id="secretBtn">Double Click or Long Press Me 🤫</button>
+    <p id="secretMsg" class="hidden">🎉 Secret Activated! 🎉</p>
+  </section>
+
+  <section id="interactive">
+    <h2>2. Interactive Elements</h2>
+
+    
+    <div class="gallery">
+      <img src="https://picsum.photos/id/1015/300/200" alt="Gallery Image" id="galleryImg" />
+      <br />
+      <button id="prevImg">Prev</button>
+      <button id="nextImg">Next</button>
+    </div>
+
+    
+    <div class="accordion">
+      <button class="accordion-btn">Section 1</button>
+      <div class="panel">
+        <p>This is the first section content.</p>
+      </div>
+
+      <button class="accordion-btn">Section 2</button>
+      <div class="panel">
+        <p>This is the second section content.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="formSection">
+    <h2>3. Form Validation</h2>
+    <form id="signupForm" novalidate>
+      <label>
+        Name: <input type="text" id="name" required placeholder="Your name" />
+      </label>
+      <label>
+        Email: <input type="email" id="email" required placeholder="you@example.com" />
+        <span class="error" id="emailError"></span>
+      </label>
+      <label>
+        Password: <input type="password" id="password" required placeholder="Min 8 chars" />
+        <span class="error" id="passwordError"></span>
+      </label>
+      <button type="submit">Sign Up</button>
+      <p id="formMessage"></p>
+    </form>
+  </section>
+
+  <script>
+    
+
+    
+    const colorBtn = document.getElementById('colorBtn');
+    colorBtn.addEventListener('click', () => {
+      colorBtn.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      colorBtn.textContent = "Color Changed!";
+    });
+
+
+    const hoverBox = document.getElementById('hoverBox');
+    hoverBox.addEventListener('mouseenter', () => {
+      hoverBox.classList.add('hovered');
+    });
+    hoverBox.addEventListener('mouseleave', () => {
+      hoverBox.classList.remove('hovered');
+    });
+
+    
+    const keyInput = document.getElementById('keyInput');
+    const keypressResult = document.getElementById('keypressResult');
+
+    keyInput.addEventListener('keypress', (e) => {
+      keypressResult.textContent = `You pressed: ${e.key}`;
+    });
+
+    
+    const secretBtn = document.getElementById('secretBtn');
+    const secretMsg = document.getElementById('secretMsg');
+    let pressTimer;
+
+    secretBtn.addEventListener('dblclick', () => {
+      secretMsg.classList.remove('hidden');
+      setTimeout(() => secretMsg.classList.add('hidden'), 3000);
+    });
+
+    secretBtn.addEventListener('mousedown', () => {
+      pressTimer = setTimeout(() => {
+        secretMsg.classList.remove('hidden');
+        setTimeout(() => secretMsg.classList.add('hidden'), 3000);
+      }, 1500);
+    });
+
+    secretBtn.addEventListener('mouseup', () => {
+      clearTimeout(pressTimer);
+    });
+    secretBtn.addEventListener('mouseleave', () => {
+      clearTimeout(pressTimer);
+    });
+
+    
+
+    
+    const images = [
+      "https://picsum.photos/id/1015/300/200",
+      "https://picsum.photos/id/1016/300/200",
+      "https://picsum.photos/id/1018/300/200"
+    ];
+
+    let currentImgIndex = 0;
+    const galleryImg = document.getElementById('galleryImg');
+    const prevImgBtn = document.getElementById('prevImg');
+    const nextImgBtn = document.getElementById('nextImg');
+
+    function updateGallery() {
+      galleryImg.src = images[currentImgIndex];
+    }
+
+    prevImgBtn.addEventListener('click', () => {
+      currentImgIndex = (currentImgIndex - 1 + images.length) % images.length;
+      updateGallery();
+    });
+
+    nextImgBtn.addEventListener('click', () => {
+      currentImgIndex = (currentImgIndex + 1) % images.length;
+      updateGallery();
+    });
+
+    
+    const accordions = document.querySelectorAll('.accordion-btn');
+
+    accordions.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const panel = btn.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    });
+
+    
+    const form = document.getElementById('signupForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const formMessage = document.getElementById('formMessage');
+
+    function validateEmail(email) {
+      
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      
+      emailError.textContent = '';
+      passwordError.textContent = '';
+      formMessage.textContent = '';
+
+      
+      if (!form.name.value.trim()) {
+        alert("Name is required");
+        valid = false;
+      }
+
+      
+      if (!validateEmail(emailInput.value.trim())) {
+        emailError.textContent = "Please enter a valid email address.";
+        valid = false;
+      }
+
+      
+      if (passwordInput.value.length < 8) {
+        passwordError.textContent = "Password must be at least 8 characters.";
+        valid = false;
+      }
+
+      if (valid) {
+        formMessage.textContent = "Form submitted successfully!";
+        form.reset();
+      }
+    });
+
+    
+    passwordInput.addEventListener('input', () => {
+      if (passwordInput.value.length >= 8) {
+        passwordError.textContent = '';
+      } else {
+        passwordError.textContent = "Password must be at least 8 characters.";
+      }
+    });
+  </script>
+
+</body>
+</html>
